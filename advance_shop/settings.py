@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # local_app
     'core',
+    'userauths'
 
     # installed_app
 ]
@@ -138,3 +139,5 @@ JAZZMIN_SETTINGS = {
     'site_logo': "main/imgs/theme/loading.gif",
     'copyright': "salar-shop.com"
 }
+
+AUTH_USER_MODEL = 'userauths.User'
