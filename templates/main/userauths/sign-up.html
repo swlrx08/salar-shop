@@ -22,7 +22,7 @@
                                 <div class="login_wrap widget-taber-content background-white">
                                     <div class="padding_eight_all bg-white">
                                         {% if form.errors %}
-                                            <div class="alart alart-danger">
+                                            <div class="alert alert-danger">
                                                 <strong>{{ form.errors }}</strong>
                                             </div>
                                         {% endif %}
@@ -30,7 +30,7 @@
                                         <div class="heading_s1">
                                             <h1 class="mb-5">Create an Account</h1>
                                             <p class="mb-30">Already have an account? <a
-                                                    href="page-login.html">Login</a></p>
+                                                    href="{% url 'userauths:sign-in' %}">Login</a></p>
                                         </div>
                                         <form method="POST">
                                             {% csrf_token %}
@@ -57,34 +57,34 @@
                                             {#                                                <input required="" type="password" name="password"#}
                                             {#                                                       placeholder="Confirm password"/>#}
                                             {#                                            </div>#}
-                                            <div class="login_footer form-group">
-                                                <div class="chek-form">
-                                                    <input type="text" required="" name="email"
-                                                           placeholder="Security code *"/>
-                                                </div>
-                                                <span class="security-code">
-                                                    <b class="text-new">8</b>
-                                                    <b class="text-hot">6</b>
-                                                    <b class="text-sale">7</b>
-                                                    <b class="text-best">5</b>
-                                                </span>
-                                            </div>
-                                            <div class="payment_option mb-50">
-                                                <div class="custome-radio">
-                                                    <input class="form-check-input" required="" type="radio"
-                                                           name="payment_option" id="exampleRadios3" checked=""/>
-                                                    <label class="form-check-label" for="exampleRadios3"
-                                                           data-bs-toggle="collapse" data-target="#bankTranfer"
-                                                           aria-controls="bankTranfer">I am a customer</label>
-                                                </div>
-                                                <div class="custome-radio">
-                                                    <input class="form-check-input" required="" type="radio"
-                                                           name="payment_option" id="exampleRadios4" checked=""/>
-                                                    <label class="form-check-label" for="exampleRadios4"
-                                                           data-bs-toggle="collapse" data-target="#checkPayment"
-                                                           aria-controls="checkPayment">I am a vendor</label>
-                                                </div>
-                                            </div>
+{#                                            <div class="login_footer form-group">#}
+{#                                                <div class="chek-form">#}
+{#                                                    <input type="text" required="" name="email"#}
+{#                                                           placeholder="Security code *"/>#}
+{#                                                </div>#}
+{#                                                <span class="security-code">#}
+{#                                                    <b class="text-new">8</b>#}
+{#                                                    <b class="text-hot">6</b>#}
+{#                                                    <b class="text-sale">7</b>#}
+{#                                                    <b class="text-best">5</b>#}
+{#                                                </span>#}
+{#                                            </div>#}
+{#                                            <div class="payment_option mb-50">#}
+{#                                                <div class="custome-radio">#}
+{#                                                    <input class="form-check-input" required="" type="radio"#}
+{#                                                           name="payment_option" id="exampleRadios3" checked=""/>#}
+{#                                                    <label class="form-check-label" for="exampleRadios3"#}
+{#                                                           data-bs-toggle="collapse" data-target="#bankTranfer"#}
+{#                                                           aria-controls="bankTranfer">I am a customer</label>#}
+{#                                                </div>#}
+{#                                                <div class="custome-radio">#}
+{#                                                    <input class="form-check-input" required="" type="radio"#}
+{#                                                           name="payment_option" id="exampleRadios4" checked=""/>#}
+{#                                                    <label class="form-check-label" for="exampleRadios4"#}
+{#                                                           data-bs-toggle="collapse" data-target="#checkPayment"#}
+{#                                                           aria-controls="checkPayment">I am a vendor</label>#}
+{#                                                </div>#}
+{#                                            </div>#}
                                             <div class="login_footer form-group mb-50">
                                                 <div class="chek-form">
                                                     <div class="custome-checkbox">
