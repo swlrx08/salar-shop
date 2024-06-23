@@ -547,6 +547,18 @@
                     </div>
                 </div>
             </div>
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="alert alert-{{ msg.tags }}">
+                        <strong>{{ msg }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <script>
+                setTimeout(() => {
+                    $(".alert").alert("close")
+                }, 3000)
+            </script>
         </div>
     </div>
 </header>
