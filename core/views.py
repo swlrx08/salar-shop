@@ -1,10 +1,11 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.http import require_POST
 from taggit.models import Tag
-
+from django.views.decorators.csrf import csrf_protect
 from core.models import Product, CartOrder, CartOrderItem, Category, ProductReview, ProductImages, Address, Vendor, \
     Wishlist
-from django.db.models import Count
+from django.db.models import Count, Avg
 
 
 def index(request):
@@ -70,12 +71,26 @@ def vendor_detail_view(request, vid):
 
 def product_detail_view(request, pid):
     product = Product.objects.get(pid=pid)
+    products = Product.objects.filter(category=product.category).exclude(pid=pid)
+
+    # Getting all review
+    reviews = ProductReview.objects.filter(product=product).order_by("-date")
+
+    # Getting average reviews
+    average_rating = ProductReview.objects.filter(product=product).aggregate(rating=Avg('rating'))
+
+    # Product Review from
+    from core.forms import ProductReviewForm
+    review_form = ProductReviewForm()
 
     p_images = product.p_images.all()
-    products = Product.objects.filter(category=product.category).exclude(pid=pid)
+
     context = {
         "product": product,
+        "review_form": review_form,
         "p_images": p_images,
+        "average_rating": average_rating,
+        "reviews": reviews,
         "products": products,
     }
 
@@ -90,8 +105,38 @@ def tag_list(request, tag_slug=None):
         tag = get_object_or_404(Tag, slug=tag_slug)
         products = products.filter(tags__in=[tag])
 
-    context ={
+    context = {
         "products": products,
         "tag": tag
     }
     return render(request, "main/core/tag.html", context)
+
+
+@require_POST
+@csrf_protect
+def ajax_add_review(request, pid):
+    product = Product.objects.get(pk=pid)
+    user = request.user
+
+    review = ProductReview.objects.create(
+        user=user,
+        product=product,
+        review=request.POST['review'],
+        rating=request.POST['rating'],
+    )
+
+    context = {
+        'user': user.username,
+        'review': request.POST['review'],
+        'rating': request.POST['rating'],
+    }
+
+    average_reviews = ProductReview.objects.filter(product=product).aggregate(rating=Avg("rating"))
+
+    return JsonResponse(
+        {
+            'bool': True,
+            'context': context,
+            'average_reviews': average_reviews,
+        }
+    )
