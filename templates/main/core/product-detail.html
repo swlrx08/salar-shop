@@ -304,8 +304,8 @@
                                                                 {% for r in reviews %}
                                                                     <div class="single-comment justify-content-between d-flex mb-30">
                                                                         <div class="user justify-content-between d-flex">
-                                                                            <div class="thumb text-center">
-                                                                                <img src="{% static 'main/imgs/default-avatar.jpg' %}"
+                                                                            <div class="thumb text-center ">
+                                                                                <img id="myImg" src="{% static 'main/imgs/default-avatar.jpg' %}"
                                                                                      alt=""/>
                                                                                 <a href="#"
                                                                                    class="font-heading text-brand">{{ r.user.username|title }}</a>
@@ -315,17 +315,18 @@
                                                                                     <div class="d-flex align-items-center">
                                                                                         <span class="font-xs text-muted">{{ r.date|date:"d M, Y" }} </span>
                                                                                     </div>
-                                                                                    <div class="product-rate d-inline-block">
-                                                                                        <div class="product-rating"
-                                                                                             style="width: 100%"></div>
+                                                                                    <div>
+                                                                                        {% for s in r.rating|ljust:r.rating %}
+                                                                                            <i class="fas fa-star text-warning"></i>
+                                                                                        {% endfor %}
                                                                                     </div>
+
                                                                                 </div>
                                                                                 <p class="mb-10">{{ r.review }}</p>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 {% endfor %}
-
 
                                                             </div>
                                                         </div>
@@ -336,7 +337,8 @@
                                                                     <div class="product-rating"
                                                                          style="width: 90%"></div>
                                                                 </div>
-                                                                <h6>{{ average_rating.rating|floatformat:1 }} out of 5</h6>
+                                                                <h6>{{ average_rating.rating|floatformat:1 }} out of
+                                                                    5</h6>
                                                             </div>
                                                             <div class="progress">
                                                                 <span>5 star</span>
@@ -380,12 +382,16 @@
                                                 </div>
                                                 <!--comment form-->
                                                 <div class="comment-form">
-                                                    <h4 class="mb-15">Add a review</h4>
-{#                                                    <div class="product-rate d-inline-block mb-30"></div>#}
+                                                    <h4 class="mb-15 add-review">Add a review</h4>
+                                                    <strong class="text-success" id="review-res"> Review Added </strong>
+                                                    {#                                                    <div class="product-rate d-inline-block mb-30"></div>#}
                                                     <div class="row">
                                                         <div class="col-lg-8 col-md-12">
-                                                            <form class="form-contact comment_form" method="POST" action="{% url "core:ajax-add-review" product.id %}" id="commentForm">
-                                                                  {% csrf_token %}
+                                                            <form class="form-contact comment_form hide-comment-form"
+                                                                  method="POST"
+                                                                  action="{% url "core:ajax-add-review" product.id %}"
+                                                                  id="commentForm">
+                                                                {% csrf_token %}
                                                                 <div class="row">
                                                                     <div class="col-12">
                                                                         <div class="form-group">
@@ -397,27 +403,27 @@
                                                                             {{ review_form.rating }}
                                                                         </div>
                                                                     </div>
-{#                                                                    <div class="col-sm-6">#}
-{#                                                                        <div class="form-group">#}
-{#                                                                            <input class="form-control" name="name"#}
-{#                                                                                   id="name" type="text"#}
-{#                                                                                   placeholder="Name"/>#}
-{#                                                                        </div>#}
-{#                                                                    </div>#}
-{#                                                                    <div class="col-sm-6">#}
-{#                                                                        <div class="form-group">#}
-{#                                                                            <input class="form-control" name="email"#}
-{#                                                                                   id="email" type="email"#}
-{#                                                                                   placeholder="Email"/>#}
-{#                                                                        </div>#}
-{#                                                                    </div>#}
-{#                                                                    <div class="col-12">#}
-{#                                                                        <div class="form-group">#}
-{#                                                                            <input class="form-control" name="website"#}
-{#                                                                                   id="website" type="text"#}
-{#                                                                                   placeholder="Website"/>#}
-{#                                                                        </div>#}
-{#                                                                    </div>#}
+                                                                    {#                                                                    <div class="col-sm-6">#}
+                                                                    {#                                                                        <div class="form-group">#}
+                                                                    {#                                                                            <input class="form-control" name="name"#}
+                                                                    {#                                                                                   id="name" type="text"#}
+                                                                    {#                                                                                   placeholder="Name"/>#}
+                                                                    {#                                                                        </div>#}
+                                                                    {#                                                                    </div>#}
+                                                                    {#                                                                    <div class="col-sm-6">#}
+                                                                    {#                                                                        <div class="form-group">#}
+                                                                    {#                                                                            <input class="form-control" name="email"#}
+                                                                    {#                                                                                   id="email" type="email"#}
+                                                                    {#                                                                                   placeholder="Email"/>#}
+                                                                    {#                                                                        </div>#}
+                                                                    {#                                                                    </div>#}
+                                                                    {#                                                                    <div class="col-12">#}
+                                                                    {#                                                                        <div class="form-group">#}
+                                                                    {#                                                                            <input class="form-control" name="website"#}
+                                                                    {#                                                                                   id="website" type="text"#}
+                                                                    {#                                                                                   placeholder="Website"/>#}
+                                                                    {#                                                                        </div>#}
+                                                                    {#                                                                    </div>#}
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <button type="submit"

@@ -230,43 +230,43 @@
 
                                     {% for c in categories %}
                                         <li>
-                                            <a href="{% url "core:category-product-list" c.cid %}"></a> <img
-                                                    src="{{ c.image.url }}" alt=""/>{{ c.title }}
-                                                </a>
+                                            <a href="{% url "core:category-product-list" c.cid %}"><img
+                                                src="{{ c.image.url }}" alt=""/>{{ c.title }}
+                                            </a>
                                         </li>
                                     {% endfor %}
                                 </ul>
                             </div>
-                            <div class="more_slide_open" style="display: none">
-                                <div class="d-flex categori-dropdown-inner">
-                                    <ul>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{% static 'main/imgs/theme/icons/icon-1.svg' %}" alt=""/>Milks
-                                                and Dairies</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{% static 'main/imgs/theme/icons/icon-2.svg' %}" alt=""/>Clothing
-                                                & beauty</a>
-                                        </li>
-                                    </ul>
-                                    <ul class="end">
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{% static 'main/imgs/theme/icons/icon-3.svg' %}" alt=""/>Wines
-                                                & Drinks</a>
-                                        </li>
-                                        <li>
-                                            <a href="shop-grid-right.html"> <img
-                                                    src="{% static 'main/imgs/theme/icons/icon-4.svg' %}" alt=""/>Fresh
-                                                Seafood</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show more...</span>
-                            </div>
+{#                            <div class="more_slide_open" style="display: none">#}
+{#                                <div class="d-flex categori-dropdown-inner">#}
+{#                                    <ul>#}
+{#                                        <li>#}
+{#                                            <a href="shop-grid-right.html"> <img#}
+{#                                                    src="{% static 'main/imgs/theme/icons/icon-1.svg' %}" alt=""/>Milks#}
+{#                                                and Dairies</a>#}
+{#                                        </li>#}
+{#                                        <li>#}
+{#                                            <a href="shop-grid-right.html"> <img#}
+{#                                                    src="{% static 'main/imgs/theme/icons/icon-2.svg' %}" alt=""/>Clothing#}
+{#                                                & beauty</a>#}
+{#                                        </li>#}
+{#                                    </ul>#}
+{#                                    <ul class="end">#}
+{#                                        <li>#}
+{#                                            <a href="shop-grid-right.html"> <img#}
+{#                                                    src="{% static 'main/imgs/theme/icons/icon-3.svg' %}" alt=""/>Wines#}
+{#                                                & Drinks</a>#}
+{#                                        </li>#}
+{#                                        <li>#}
+{#                                            <a href="shop-grid-right.html"> <img#}
+{#                                                    src="{% static 'main/imgs/theme/icons/icon-4.svg' %}" alt=""/>Fresh#}
+{#                                                Seafood</a>#}
+{#                                        </li>#}
+{#                                    </ul>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show more...</span>#}
+{#                            </div>#}
                         </div>
                     </div>
                     <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
