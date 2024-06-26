@@ -1,4 +1,4 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_protect
 from core.models import Product, CartOrder, CartOrderItem, Category, ProductReview, ProductImages, Address, Vendor, \
     Wishlist
 from django.db.models import Count, Avg
+from django.template.loader import render_to_string
 
 
 def index(request):
@@ -83,10 +84,19 @@ def product_detail_view(request, pid):
     from core.forms import ProductReviewForm
     review_form = ProductReviewForm()
 
+    make_review = True
+
+    if request.user.is_authenticated:
+        user_review_count = ProductReview.objects.filter(user=request.user, product=product).count()
+
+        if user_review_count > 0:
+            make_review = False
+
     p_images = product.p_images.all()
 
     context = {
         "product": product,
+        "make_review": make_review,
         "review_form": review_form,
         "p_images": p_images,
         "average_rating": average_rating,
@@ -140,3 +150,35 @@ def ajax_add_review(request, pid):
             'average_reviews': average_reviews,
         }
     )
+
+
+def search_view(request):
+    query = request.GET.get("q")
+
+    products = Product.objects.filter(title__icontains=query).order_by("-date")
+
+    context = {
+        "products": products,
+        "query": query
+    }
+    return render(request, "main/core/search.html", context)
+
+
+def filter_product(request):
+    categories = request.GET.getlist("category[]")
+    vendors = request.GET.getlist("vendor[]")
+
+    products = Product.objects.filter(product_status="published").order_by("-id").distinct()
+
+    if len(categories) > 0:
+        products = products.filter(category__id__in=categories).distinct()
+
+    if len(vendors) > 0:
+        products = products.filter(vendor__id__in=vendors).distinct()
+
+    context = {
+        "products": products
+    }
+
+    data = render_to_string("main/core/async/product-list.html", context)
+    return JsonResponse({"data": data})
