@@ -63,10 +63,17 @@ $("#commentForm").submit(function (e) {
 
 
 $(document).ready(function () {
-    $(".filter-checkbox").on("click", function () {
+    $(".filter-checkbox , #price-filter-btn").on("click", function () {
         console.log("A checkbox have been clicked");
 
         let filter_object = {}
+
+        let min_price = $("#max_price").attr("min")
+        let max_price = $("#max_price").val()
+
+        filter_object.min_price = min_price;
+        filter_object.max_price = max_price;
+
 
         $(".filter-checkbox").each(function () {
             let filter_value = $(this).val()
@@ -75,7 +82,7 @@ $(document).ready(function () {
             // console.log("Filter value is:", filter_value);
             // console.log("Filter value is:", filter_key);
 
-            filter_object[filter_key] = Array.from(document.querySelectorAll('input[data-filter=' + filter_key + ']:checked')).map(function (element){
+            filter_object[filter_key] = Array.from(document.querySelectorAll('input[data-filter=' + filter_key + ']:checked')).map(function (element) {
                 return element.value
             })
         })
@@ -84,14 +91,43 @@ $(document).ready(function () {
             url: '/filter-products/',
             data: filter_object,
             dataType: 'json',
-            beforeSend: function(){
+            beforeSend: function () {
                 console.log("Trying to  filter product...");
             },
-            success: function (response){
+            success: function (response) {
                 console.log(response);
                 console.log("Data filtered successfully");
                 $('#filter-product').html(response.data)
             }
         })
     })
+    $("#max_price").on("blur", function () {
+        let min_price = $(this).attr("min")
+        let max_price = $(this).attr("max")
+        let current_price = $(this).val()
+
+        // console.log("Current Price Is:", current_price);
+        // console.log("Max Price Is:", max_price);
+        // console.log("Min Price Is:", min_price);
+
+
+        if (current_price < parseInt(min_price) || current_price > parseInt(max_price)) {
+            // console.log("Price Error");
+
+            min_price = Math.round(min_price * 100) / 100
+            max_price = Math.round(max_price * 100) / 100
+
+            alert("Price must between $" +min_price+ " and $" +max_price)
+            $(this).val(min_price)
+            $('#range').val(min_price)
+
+            $(this).focus()
+
+            return false
+
+        }
+    })
+
 })
+
+
