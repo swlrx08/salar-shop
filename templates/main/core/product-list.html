@@ -132,7 +132,8 @@
                                         <div class="price-filter mb-20">
                                             <div class="price-filter-inner">
                                                 {#                                                <div id="slider-range" class="mb-20"></div>#}
-                                                <input class="slider-range" type="range" name="range" value="{{ min_max_price.price__min|floatformat:2 }}" id="range"
+                                                <input class="slider-range" type="range" name="range"
+                                                       value="{{ min_max_price.price__min|floatformat:2 }}" id="range"
                                                        max="{{ min_max_price.price__max }}"
                                                        min="{{ min_max_price.price__min }}"
                                                        oninput="max_price.value=this.value">
@@ -144,13 +145,16 @@
                                                                                      class="text-brand">{{ min_max_price.price__max|floatformat:2 }}</strong>
                                                     </div>
                                                 </div>
-                                                <input type="number" id="max_price" value="{{ min_max_price.price__min|floatformat:2 }}" min="{{ min_max_price.price__min }}"
+                                                <input type="number" id="max_price"
+                                                       value="{{ min_max_price.price__min|floatformat:2 }}"
+                                                       min="{{ min_max_price.price__min }}"
                                                        max="{{ min_max_price.price__max }}" placeholder="Current Price"
                                                        onkeyup="range.value=this.value">
                                             </div>
                                         </div>
                                         <div class="custome-checkbox">
-                                            <button class="btn mt-20 w-100" type="button" id="price-filter-btn">Filter</button>
+                                            <button class="btn mt-20 w-100" type="button" id="price-filter-btn">Filter
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -254,12 +258,26 @@
                                         </div>
                                         <div class="product-card-bottom">
                                             <div class="product-price">
-                                                <span>${{ product.price }}</span>
-                                                <span class="old-price">${{ product.old_price }}</span>
+                                                <span>$</span><span
+                                                    class="current-product-price-{{ product.id }}">{{ product.price }}</span>
+                                                <span class="old-price">$</span><span
+                                                    class="old-price">{{ product.old_price }}</span>
                                             </div>
                                             <div class="add-cart">
-                                                <a class="add" href="shop-cart.html"><i
-                                                        class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                                <input type="hidden" value="1" id="product-quantity"
+                                                       class="product-quantity-{{ product.id }}">
+                                                <input type="hidden" class="product-id-{{ product.id }}"
+                                                       value="{{ product.id }}">
+                                                <input type="hidden" class="product-img-{{ product.id }}"
+                                                       value="{{ product.image.url }}">
+                                                <input type="hidden" class="product-pid-{{ product.id }}"
+                                                       value="{{ product.pid }}">
+                                                <input type="hidden" class="product-title-{{ product.id }}"
+                                                       value="{{ product.title }}">
+                                                <button class="add add-to-cart-btn" data-index="{{ product.id }}"
+                                                        style="border: none;" id="add-to-cart-btn"><i
+                                                        class="fi-rs-shopping-cart mr-5"></i>Add
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

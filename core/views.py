@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from taggit.models import Tag
 from django.views.decorators.csrf import csrf_protect
@@ -7,6 +7,7 @@ from core.models import Product, CartOrder, CartOrderItem, Category, ProductRevi
     Wishlist
 from django.db.models import Count, Avg
 from django.template.loader import render_to_string
+from django.contrib import messages
 
 
 def index(request):
@@ -188,3 +189,47 @@ def filter_product(request):
 
     data = render_to_string("main/core/async/product-list.html", context)
     return JsonResponse({"data": data})
+
+
+def add_to_cart(request):
+    cart_product = {}
+
+    cart_product[str(request.GET.get('id'))] = {
+        'title': request.GET.get('title'),
+        'qty': request.GET.get('qty'),
+        'price': request.GET.get('price'),
+        'image': request.GET.get('image'),
+        'pid': request.GET.get('pid'),
+    }
+
+    if 'cart_data_obj' in request.session:
+        if str(request.GET.get('id')) in request.session['cart_data_obj']:
+            cart_data = request.session['cart_data_obj']
+            cart_data[str(request.GET.get('id'))]['qty'] = int(cart_product[str(request.GET.get('id'))]['qty'])
+            cart_data.update(cart_data)
+            request.session['cat_data_obj'] = cart_data
+        else:
+            cart_data = request.session['cart_data_obj']
+            cart_data.update(cart_product)
+            request.session['cart_data_obj'] = cart_data
+    else:
+        request.session['cart_data_obj'] = cart_product
+    return JsonResponse({
+        "data": request.session['cart_data_obj'],
+        "total_cart_items": len(request.session['cart_data_obj'])
+    })
+
+
+def cart_view(request):
+    cart_total_amount = 0
+    if 'cart_data_obj' in request.session:
+        for product_id, item in request.session['cart_data_obj'].items():
+            cart_total_amount += int(item['qty']) * float(item['price'])
+        return render(request, "main/core/cart.html", {
+            "cart_data": request.session['cart_data_obj'],
+            "total_cart_items": len(request.session['cart_data_obj']),
+            "cart_total_amount": cart_total_amount,
+        })
+    else:
+        messages.warning(request, "Your cart is empty")
+        return redirect("core:index")

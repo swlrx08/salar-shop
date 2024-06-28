@@ -115,9 +115,8 @@
                                                         <a aria-label="Compare" class="action-btn"
                                                            href="shop-compare.html"><i
                                                                 class="fi-rs-shuffle"></i></a>
-                                                        <a aria-label="Quick view" class="action-btn"
-                                                           data-bs-toggle="modal"
-                                                           data-bs-target="#quickViewModal"><i
+                                                        <a href="{% url 'core:product-detail' product.pid %}"
+                                                           aria-label="Quick view" class="action-btn"><i
                                                                 class="fi-rs-eye"></i></a>
                                                     </div>
                                                     <div class="product-badges product-badges-position product-badges-mrg">
@@ -143,12 +142,22 @@
                                                     </div>
                                                     <div class="product-card-bottom">
                                                         <div class="product-price">
-                                                            <span>${{ product.price }}</span>
-                                                            <span class="old-price">${{ product.old_price }}</span>
+                                                            <span>$</span><span class="current-product-price-{{ product.id }}">{{ product.price }}</span>
+                                                            <span class="old-price">$</span><span class="old-price">{{ product.old_price }}</span>
                                                         </div>
                                                         <div class="add-cart">
-                                                            <a class="add" href="shop-cart.html"><i
-                                                                    class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                                            <input type="hidden" value="1" id="product-quantity"
+                                                                   class="product-quantity-{{ product.id }}">
+                                                            <input type="hidden" class="product-id-{{ product.id }}"
+                                                                   value="{{ product.id }}">
+                                                            <input type="hidden" class="product-img-{{ product.id }}"
+                                                                   value="{{ product.image.url }}">
+                                                            <input type="hidden" class="product-pid-{{ product.id }}"
+                                                                   value="{{ product.pid }}">
+                                                            <input type="hidden" class="product-title-{{ product.id }}"
+                                                                   value="{{ product.title }}">
+                                                            <button class="add add-to-cart-btn" data-index="{{ product.id }}" style="border: none;" id="add-to-cart-btn" ><i
+                                                                    class="fi-rs-shopping-cart mr-5"></i>Add </button>
                                                         </div>
                                                     </div>
                                                 </div>
