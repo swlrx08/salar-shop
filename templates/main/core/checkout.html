@@ -1,0 +1,92 @@
+{% extends "main/components/_layout.html" %}
+{% load static %}
+{% block title %}
+    Checkout Page
+{% endblock %}
+{% block content %}
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <span></span> Shop <span></span> Checkout
+                </div>
+            </div>
+        </div>
+        <div class="container mb-80 mt-50">
+            <div class="row">
+                <div class="col-lg-8 mb-40">
+                    <h1 class="heading-2 mb-10">Checkout</h1>
+                    <div class="d-flex justify-content-between">
+                        <h6 class="text-body"> There are <span class="text-brand">{{ total_cart_items }} </span>
+                            products in your cart</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="row">
+                        {% for product_id, item in cart_data.items %}
+                            <div class="col-lg-6">
+                                <div class="card" style="max-width: 540px">
+                                    <div class="row g-0">
+                                        <div class="col-sm-4">
+                                            <img src="{{ item.image }}"
+                                                 style="width: 100%; height: 100%; object-fit: cover"
+                                                 class="rounded-start"
+                                                 alt="Card image"/>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a class="text-heading" href="{% url 'core:product-detail' item.pid %}">{{ item.title}}</a></h5>
+                                                <p class="card-text fs-sm">Qty: {{ item.qty }}</p>
+                                                <p class="card-text fs-sm">Price: ${{ item.price }}</p>
+                                                <p class="card-text fs-sm">Total: ${% widthratio item.price 1 item.qty %}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <a href="{% url "core:cart" %}" class="btn btn-fill-out btn-block mt-30 mb-20"> Go Back To Cart</a>
+                    <div class="border cart-totals mb-50">
+                        <div class="d-flex align-items-end justify-content-between mb-30">
+                            <h4>Order Summary</h4>
+                        </div>
+
+                        <div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <p class="fw-bold">Subtotal</p>
+                                <p>${{ cart_total_amount|floatformat:2 }}</p>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <p class="fw-bold">Shipping</p>
+                                <p>$0</p>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <p class="fw-bold">Total</p>
+                                <p>${{ cart_total_amount|floatformat:2 }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-50">
+                        <div class="col-lg-12">
+                            <form method="post" class="apply-coupon">
+                                <input type="text" placeholder="Enter Coupon Code..."/>
+                                <button class="btn btn-md" name="login">Apply Coupon</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <button class="btn w-100" style="background-color: blueviolet">Pay With Stripe (Credit or Debit
+                        Card)
+                    </button>
+                    <div id="paypal-button-container" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </main>{% endblock %}

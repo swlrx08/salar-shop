@@ -137,13 +137,13 @@
                                     <img alt="Nest" src="{% static 'main/imgs/theme/icons/icon-cart.svg' %}"/>
                                     <span class="pro-count blue cart-items-count">{{ request.session.cart_data_obj|length }}</span>
                                 </a>
-                                <a href="shop-cart.html"><span class="lable">Cart</span></a>
+                                <a href="{% url  "core:cart"%}"><span class="lable">Cart</span></a>
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                     <div class="shopping-cart-footer">
 
                                         <div class="shopping-cart-button">
                                             <a href="{% url "core:cart" %}" class="outline">View cart</a>
-                                            <a href="">Checkout</a>
+                                            <a href="{% url "core:checkout"%}">Checkout</a>
                                         </div>
                                     </div>
                                 </div>
