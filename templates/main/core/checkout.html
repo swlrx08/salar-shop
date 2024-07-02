@@ -82,10 +82,12 @@
                         </div>
                     </div>
 
-                    <button class="btn w-100" style="background-color: blueviolet">Pay With Stripe (Credit or Debit
-                        Card)
-                    </button>
-                    <div id="paypal-button-container" class="mt-3"></div>
+{#                    <button class="btn w-100" style="background-color: blueviolet">Pay With Stripe (Credit or Debit#}
+{#                        Card)#}
+{#                    </button>#}
+                    <div id="paypal-button-container" class="mt-3">
+                        {{ paypal_payment_button.render }}
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
@@ -284,31 +285,93 @@ def update_cart(request):
     return JsonResponse({"data": context, 'total_cart_items': len(request.session['cart_data_obj'])})
 
 
+@login_required
 def checkout_view(request):
+    cart_total_amount = 0
+    total_amount = 0
+
+    #  Checking if cart_data_obj session exists
+    if 'cart_data_obj' in request.session:
+
+        # Getting total amount for PayPal Amount
+        for product_id, item in request.session['cart_data_obj'].items():
+            total_amount += int(item['qty']) * float(item['price'])
+
+        # Creating Order Object
+        order = CartOrder.objects.create(
+            user=request.user,
+            price=total_amount,
+        )
+
+        # Getting total amount for The Cart
+        for product_id, item in request.session['cart_data_obj'].items():
+            cart_total_amount += int(item['qty']) * float(item['price'])
+
+            cart_order_item = CartOrderItem.objects.create(
+                order=order,
+                invoice_no="INVOICE_NO-" + str(order.id),
+                item=item['title'],
+                qty=item['qty'],
+                price=item['price'],
+                total=float(item['qty']) * float(item['price'])
+            )
+
     host = request.get_host()
     paypal_dict = {
         'business': settings.PAYPAL_RECEIVER_EMAIL,
-        'amount': '200',
-        'item_name': "Order-item-No-3",
-        'invoice': 'INVOICE_NO-3',
+        'amount': cart_total_amount,
+        'item_name': "Order-item-No-" + str(order.id),
+        'invoice': 'INV_NO-' + str(order.id),
         'currency_code': 'USD',
         'notify_url': 'http://{}{}'.format(host, reverse("core:paypal-ipn")),
         'return_url': 'http://{}{}'.format(host, reverse("core:payment-completed")),
-        'cancel_return': 'http://{}{}'.format(host, reverse("core:payment-failed")),
+        'cancel_url': 'http://{}{}'.format(host, reverse("core:payment-failed")),
     }
+
+    paypal_payment_button = PayPalPaymentsForm(initial=paypal_dict)
+
     cart_total_amount = 0
     if 'cart_data_obj' in request.session:
         for product_id, item in request.session['cart_data_obj'].items():
             cart_total_amount += int(item['qty']) * float(item['price'])
 
-        return render(request, "main/core/checkout.html", {"cart_data": request.session['cart_data_obj'],
-                                                           "total_cart_items": len(request.session['cart_data_obj']),
-                                                           "cart_total_amount": cart_total_amount, })
+    return render(request, "main/core/checkout.html", {"cart_data": request.session['cart_data_obj'],
+                                                       "total_cart_items": len(request.session['cart_data_obj']),
+                                                       "cart_total_amount": cart_total_amount,
+                                                       'paypal_payment_button': paypal_payment_button})
 
 
+@login_required
 def payment_completed_view(request):
-    return render(request, "main/core/payment_completed.html")
+    cart_total_amount = 0
+    if 'cart_data_obj' in request.session:
+        for product_id, item in request.session['cart_data_obj'].items():
+            cart_total_amount += int(item['qty']) * float(item['price'])
+    return render(request, "main/core/payment_completed.html", {"cart_data": request.session['cart_data_obj'],
+                                                                "total_cart_items": len(
+                                                                    request.session['cart_data_obj']),
+                                                                "cart_total_amount": cart_total_amount, })
 
 
+@login_required
 def payment_failed_view(request):
     return render(request, "main/core/payment_failed.html")
+
+
+@login_required
+def customer_dashboard(request):
+    orders = CartOrder.objects.filter(user=request.user).order_by("-id")
+    context = {
+        "orders": orders
+    }
+    return render(request, "main/core/dashboard.html", context)
+
+
+def order_detail(request, id):
+    order = CartOrder.objects.get(user=request.user, id=id)
+    order_items = CartOrderItem.objects.filter(order=order)
+
+    context = {
+        "order_items": order_items
+    }
+    return render(request, "main/core/order-detail.html", context)

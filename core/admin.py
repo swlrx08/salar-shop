@@ -9,7 +9,8 @@ class ProductImagesAdmin(admin.TabularInline):
 
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImagesAdmin]
-    list_display = ['user', 'title', 'product_image', 'price', 'category', 'vendor', 'featured', 'product_status', 'pid']
+    list_display = ['user', 'title', 'product_image', 'price', 'category', 'vendor', 'featured', 'product_status',
+                    'pid']
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -21,6 +22,7 @@ class VendorAdmin(admin.ModelAdmin):
 
 
 class CartOrderAdmin(admin.ModelAdmin):
+    list_editable = ['paid_status', 'product_status']
     list_display = ['user', 'price', 'paid_status', 'order_date', 'product_status']
 
 

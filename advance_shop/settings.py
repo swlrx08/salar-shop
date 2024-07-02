@@ -149,6 +149,8 @@ JAZZMIN_SETTINGS = {
     'copyright': "salar-shop.com"
 }
 
+LOGIN_URL = "userauths:sign-in"
+
 AUTH_USER_MODEL = 'userauths.User'
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -168,5 +170,5 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-PAYPAL_RECEIVER_EMAIL = 'swlrx08@gmail.com'
+PAYPAL_RECEIVER_EMAIL = 'Swlrx08@gmail.com'
 PAYPAL_TEST = True
