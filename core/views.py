@@ -330,15 +330,21 @@ def checkout_view(request):
 
     paypal_payment_button = PayPalPaymentsForm(initial=paypal_dict)
 
-    cart_total_amount = 0
-    if 'cart_data_obj' in request.session:
-        for product_id, item in request.session['cart_data_obj'].items():
-            cart_total_amount += int(item['qty']) * float(item['price'])
+    # cart_total_amount = 0
+    # if 'cart_data_obj' in request.session:
+    #     for product_id, item in request.session['cart_data_obj'].items():
+    #         cart_total_amount += int(item['qty']) * float(item['price'])
+    try:
+        active_address = Address.objects.get(user=request.user, status=True)
+    except:
+        messages.warning(request, "There are multiple addresses, only one should be activated")
+        active_address = None
 
     return render(request, "main/core/checkout.html", {"cart_data": request.session['cart_data_obj'],
                                                        "total_cart_items": len(request.session['cart_data_obj']),
                                                        "cart_total_amount": cart_total_amount,
-                                                       'paypal_payment_button': paypal_payment_button})
+                                                       'paypal_payment_button': paypal_payment_button,
+                                                       "active_address": active_address})
 
 
 @login_required
@@ -361,8 +367,23 @@ def payment_failed_view(request):
 @login_required
 def customer_dashboard(request):
     orders = CartOrder.objects.filter(user=request.user).order_by("-id")
+    address = Address.objects.filter(user=request.user)
+
+    if request.method == "POST":
+        address = request.POST.get("address")
+        phone = request.POST.get("phone")
+
+        new_address = Address.objects.create(
+            user=request.user,
+            address=address,
+            mobile_num=phone,
+        )
+        messages.success(request, "Address Added Successfully!")
+        return redirect("core:dashboard")
+
     context = {
-        "orders": orders
+        "orders": orders,
+        "address": address,
     }
     return render(request, "main/core/dashboard.html", context)
 
@@ -375,3 +396,12 @@ def order_detail(request, id):
         "order_items": order_items
     }
     return render(request, "main/core/order-detail.html", context)
+
+
+def make_address_default(request):
+    id = request.GET["id"]
+    Address.objects.update(status=False)
+    Address.objects.filter(id=id).update(status=True)
+    return JsonResponse({
+        "boolean": True
+    })

@@ -106,7 +106,8 @@
                                                                     </td>
                                                                 {% endif %}
                                                                 <td>${{ order.price }}</td>
-                                                                <td><a href="{% url "core:order-detail" order.id %}" class="btn-small d-block">View</a></td>
+                                                                <td><a href="{% url "core:order-detail" order.id %}"
+                                                                       class="btn-small d-block">View</a></td>
                                                             </tr>
                                                         {% endfor %}
                                                         </tbody>
@@ -153,37 +154,61 @@
                                     <div class="tab-pane fade" id="address" role="tabpanel"
                                          aria-labelledby="address-tab">
                                         <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="card mb-3 mb-lg-0">
+                                            <div>
+                                                <form class="mb-4" method="POST">
+                                                    {% csrf_token %}
                                                     <div class="card-header">
-                                                        <h3 class="mb-0">Billing Address</h3>
+                                                        <h5>Add Address</h5>
                                                     </div>
-                                                    <div class="card-body">
-                                                        <address>
-                                                            3522 Interstate<br/>
-                                                            75 Business Spur,<br/>
-                                                            Sault Ste. <br/>Marie, MI 49783
-                                                        </address>
-                                                        <p>New York</p>
-                                                        <a href="#" class="btn-small">Edit</a>
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <input class="form-control" type="text" name="address"
+                                                                   placeholder="Address" required="">
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <input class="form-control" type="text" name="phone"
+                                                                   placeholder="Phone" required="">
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <button type="submit"
+                                                                    class="btn btn-fill-out submit font-weight-bold"
+                                                                    name="submit" value="">Save Address
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <hr>
+                                            <br>
+                                            {% for a in address %}
+                                                <div class="col-lg-6">
+                                                    <div class="card mb-3 mb-lg-0">
+                                                        <div class="card-header">
+                                                            <h4 class="mb-0">Address{{ a.id }}</h4>
+                                                        </div>
+
+                                                        <div class="card-body border rounded">
+                                                            <address>
+                                                                <p>{{ a.address }}</p>
+                                                                <p>{{ a.mobile_num }}</p>
+                                                            </address>
+                                                            <br>
+                                                            {% if a.status %}
+                                                                <i data-address-id="{{ a.id }}" class="fa fa-check-circle text-success check{{ a.id }} checkin"></i>
+                                                                <button data-address-id="{{ a.id }}" style="display: none" class="btn make-default-address button{{ a.id }} action-btn">Make Default</button>
+
+                                                            {% else %}
+                                                                <i data-address-id="{{ a.id }}" style="display: none" class="fa fa-check-circle text-success check{{ a.id }} checkin" ></i>
+                                                                <button data-address-id="{{ a.id }}" class="btn make-default-address button{{ a.id }} action-btn">Make Default</button>
+                                                            {% endif %}
+
+
+                                                        </div>
+
+
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <h5 class="mb-0">Shipping Address</h5>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <address>
-                                                            4299 Express Lane<br/>
-                                                            Sarasota, <br/>FL 34249 USA <br/>Phone: 1.941.227.4444
-                                                        </address>
-                                                        <p>Sarasota</p>
-                                                        <a href="#" class="btn-small">Edit</a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            {% endfor %}
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="account-detail" role="tabpanel"

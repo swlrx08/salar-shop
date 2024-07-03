@@ -38,16 +38,41 @@
                                         </div>
                                         <div class="col-sm-8">
                                             <div class="card-body">
-                                                <h5 class="card-title"><a class="text-heading" href="{% url 'core:product-detail' item.pid %}">{{ item.title}}</a></h5>
+                                                <h5 class="card-title"><a class="text-heading"
+                                                                          href="{% url 'core:product-detail' item.pid %}">{{ item.title }}</a>
+                                                </h5>
                                                 <p class="card-text fs-sm">Qty: {{ item.qty }}</p>
                                                 <p class="card-text fs-sm">Price: ${{ item.price }}</p>
-                                                <p class="card-text fs-sm">Total: ${% widthratio item.price 1 item.qty %}</p>
+                                                <p class="card-text fs-sm">Total:
+                                                    ${% widthratio item.price 1 item.qty %}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         {% endfor %}
+                    </div>
+                    <br><br>
+                    <div class="row">
+                        <h4 class="mb-30">Billing Detail</h4>
+                        <form method="POST">
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <input type="text" required="" name="fname"
+                                           value="{{ request.user.username|title }}" placeholder="Fullname">
+                                </div>
+                                <div class="form-group col-lg-6">
+                                    <input type="text" required="" name="lname" value="{{ active_address.mobile_num }}"
+                                           placeholder="Mobile">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6">
+                                    <input type="text" required="" name="billing-address"
+                                           value="{{ active_address.address }}" placeholder="Address">
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <div class="col-lg-5">
@@ -82,9 +107,9 @@
                         </div>
                     </div>
 
-{#                    <button class="btn w-100" style="background-color: blueviolet">Pay With Stripe (Credit or Debit#}
-{#                        Card)#}
-{#                    </button>#}
+                    {#                    <button class="btn w-100" style="background-color: blueviolet">Pay With Stripe (Credit or Debit#}
+                    {#                        Card)#}
+                    {#                    </button>#}
                     <div id="paypal-button-container" class="mt-3">
                         {{ paypal_payment_button.render }}
                     </div>
