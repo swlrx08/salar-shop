@@ -60,5 +60,18 @@ urlpatterns = [
     path("dashboard/order/<int:id>", views.order_detail, name="order-detail"),
 
     # Make Address Default
-    path("make-default-address/", views.make_address_default, name="make-default-address")
+    path("make-default-address/", views.make_address_default, name="make-default-address"),
+
+
+    # Wishlist
+    path("wishlist/", views.wishlist_view, name="wishlist"),
+
+
+    # Adding to Wishlist
+    path("add-to-wishlist/", views.add_to_wishlist, name = "add-to-wishlist"),
+
+
+    # Remove Wishlist
+    path("remove-from-wishlist/", views.remove_wishlist, name="remove-from-wishlist"),
+
 ]

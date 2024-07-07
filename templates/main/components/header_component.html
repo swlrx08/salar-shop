@@ -91,7 +91,7 @@
                                 <option>Ice cream</option>
                             </select>
                             <input type="text" placeholder="Search for items..." name="q"/>
-                            <button class="fas fa-search" type="submit"></button>
+                            <button aria-hidden="true" type="submit"><i class="fas fa-search"></i></button>
                         </form>
                     </div>
                     <div class="header-action-right">
@@ -125,12 +125,12 @@
                                 <a href="shop-compare.html"><span class="lable ml-0">Compare</span></a>
                             </div>
                             <div class="header-action-icon-2">
-                                <a href="shop-wishlist.html">
+                                <a href="{% url "core:wishlist" %}">
                                     <img class="svgInject" alt="Nest"
                                          src="{% static 'main/imgs/theme/icons/icon-heart.svg' %}"/>
-                                    <span class="pro-count blue">6</span>
+                                    <span class="pro-count blue">{{ wishlist.count }}</span>
                                 </a>
-                                <a href="shop-wishlist.html"><span class="lable">Wishlist</span></a>
+                                <a href="{% url "core:wishlist" %}"><span class="lable">Wishlist</span></a>
                             </div>
                             <div class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="{% url "core:cart" %}">
@@ -162,7 +162,7 @@
                                             Tracking</a></li>
                                         <li><a href="page-account.html"><i class="fi fi-rs-label mr-10"></i>My
                                             Voucher</a></li>
-                                        <li><a href="shop-wishlist.html"><i class="fi fi-rs-heart mr-10"></i>My Wishlist</a>
+                                        <li><a href="{% url "core:wishlist" %}"><i class="fi fi-rs-heart mr-10"></i>My Wishlist</a>
                                         </li>
                                         <li><a href="page-account.html"><i class="fi fi-rs-settings-sliders mr-10"></i>Setting</a>
                                         </li>
@@ -406,9 +406,9 @@
                 <div class="header-action-right d-block d-lg-none">
                     <div class="header-action-2">
                         <div class="header-action-icon-2">
-                            <a href="shop-wishlist.html">
+                            <a href="{% url "core:wishlist" %}">
                                 <img alt="Nest" src="{% static 'main/imgs/theme/icons/icon-heart.svg' %}"/>
-                                <span class="pro-count white">4</span>
+                                <span class="pro-count white">{{ wishlist.count }}</span>
                             </a>
                         </div>
                         <div class="header-action-icon-2">

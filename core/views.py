@@ -14,6 +14,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from paypal.standard.forms import PayPalPaymentsForm
+from django.core import serializers
 
 
 def index(request):
@@ -405,3 +406,52 @@ def make_address_default(request):
     return JsonResponse({
         "boolean": True
     })
+
+
+@login_required
+def wishlist_view(request):
+    wishlist = Wishlist.objects.all()
+    context = {
+        "wishlist": wishlist
+    }
+    return render(request, "main/core/wishlist.html", context)
+
+
+def add_to_wishlist(request):
+    product_id = request.GET["id"]
+    product = Product.objects.get(id=product_id)
+
+    context = {}
+    wishlist_count = Wishlist.objects.filter(product=product, user=request.user).count()
+    print(wishlist_count)
+
+    if wishlist_count > 0:
+        context = {
+            "bool": True
+        }
+    else:
+        new_wishlist = Wishlist.objects.create(
+            product=product,
+            user=request.user,
+        )
+        context = {
+            "bool": True
+        }
+
+    return JsonResponse(context)
+
+
+def remove_wishlist(request):
+    pid = request.GET['id']
+    wishlist = Wishlist.objects.filter(user=request.user)
+
+    product = Wishlist.objects.get(id=pid)
+    product.delete()
+
+    context = {
+        "bool": True,
+        "wishlist": wishlist
+    }
+    wishlist_json = serializers.serialize('json', wishlist)
+    data = render_to_string("main/core/async/wishlist-list.html", context)
+    return JsonResponse({"data": data, "wishlist": wishlist_json})
