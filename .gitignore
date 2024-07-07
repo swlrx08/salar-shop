@@ -1,0 +1,13 @@
+### PyCharm ###
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+*.xml
+
+### django ###
+media/
+*.sqlite3
+*.pyc
+migrations/
